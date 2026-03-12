@@ -1,0 +1,18 @@
+# --- SEGURIDAD ---
+# No subir nunca las llaves privadas de la API
+.env
+
+# --- PYTHON ---
+# Archivos temporales de compilación de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- JUPYTER ---
+# Archivos temporales que crea Jupyter al guardar
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# --- SISTEMA ---
+.DS_Store
+Thumbs.db
