@@ -5,7 +5,8 @@ from fredapi import Fred
 import time 
 
 def download_market_data(tickers_dict, start, end, max_retries=5):
-    """Descargamos datos de Yahoo Finance con un maximo de 5 intentos, por si esta congestionada la API."""
+    """Descargamos datos de Yahoo Finance con un maximo de 5 intentos, por si esta congestionada la API.
+    """
     for attempt in range(max_retries):
         try:
             data = yf.download(list(tickers_dict.keys()), start=start, end=end)['Close']

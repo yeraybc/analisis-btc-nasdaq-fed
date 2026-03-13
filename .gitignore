@@ -16,3 +16,17 @@ __pycache__/
 # --- SISTEMA ---
 .DS_Store
 Thumbs.db
+
+# --- ENTORNOS VIRTUALES ---
+# Entornos temporales para instalar las librerías
+venv/
+.venv/
+env/
+
+# --- DATOS (Crítico) ---
+# Ignora la carpeta data para que no suba archivos CSV pesados, ya que el codigo lo descarga por si solo.
+data/*.csv
+
+# --- DISTRIBUCIÓN ---
+# Archivos HTML
+*.html
