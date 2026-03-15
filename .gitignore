@@ -1,5 +1,5 @@
 # --- SEGURIDAD ---
-# No subir nunca las llaves privadas de la API
+# Documentos con datos sensibles
 .env
 
 # --- PYTHON ---
@@ -23,8 +23,8 @@ venv/
 .venv/
 env/
 
-# --- DATOS (Crítico) ---
-# Ignora la carpeta data para que no suba archivos CSV pesados, ya que el codigo lo descarga por si solo.
+# --- DATOS ---
+# Ignora la carpeta data para que no suba archivos pesados
 data/*.csv
 
 # --- DISTRIBUCIÓN ---
