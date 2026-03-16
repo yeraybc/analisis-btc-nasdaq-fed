@@ -8,13 +8,30 @@ from statsmodels.stats.outliers_influence import variance_inflation_factor
 from scipy import stats
 
 def check_stationarity(df, variables):
-    """Traducción de vars_test en R. Ejecuta ADF y KPSS y devuelve una tabla de diagnóstico."""
+    """
+    Realiza una validación dual de estacionariedad mediante los tests ADF y KPSS.
+
+    Cruza las hipótesis de ambos tests para ofrecer un diagnóstico robusto:
+    - ADF: H0 = La serie tiene raíz unitaria (no estacionaria).
+    - KPSS: H0 = La serie es estacionaria.
+    
+    Esta función es crítica para evitar 'regresiones espurias' y decidir si 
+    las series deben ser diferenciadas antes del modelado.
+
+    Args:
+        df (pd.DataFrame): DataFrame con las series temporales.
+        variables (list): Lista de columnas a testear (ej. ['btc', 'nasdaq']).
+
+    Returns:
+        pd.DataFrame: Tabla resumen con estadísticos, valores críticos al 5% y 
+            un diagnóstico final interpretado.
+    """
     results = []
     for var in variables:
-        # ADF (H0: No estacionaria / Tiene raíz unitaria)
+        # ADF (H0: No estacionaria / Tiene raíz unitaria). Se incluye constante y tendencia ('ct') por la naturaleza de los activos
         adf_res = adfuller(df[var].dropna(), regression='ct', autolag='AIC')
         
-        # KPSS (H0: Estacionaria)
+        # KPSS (H0: Estacionaria). Se incluye tendencia ('ct') para evaluar estacionariedad en torno a ella
         kpss_res = kpss(df[var].dropna(), regression='ct', nlags="auto")
         
         # Lógica de diagnóstico
@@ -39,17 +56,31 @@ def check_stationarity(df, variables):
     return pd.DataFrame(results)
 
 def residual_diagnostics(model):
-    """Ejecuta Shapiro-Wilk, Breusch-Pagan y Durbin-Watson sobre un modelo ajustado."""
+    """
+    Evalúa los supuestos de Gauss-Markov sobre los residuos de un modelo.
+
+    Ejecuta una batería de tests estadísticos para validar el modelo:
+    1. Shapiro-Wilk: Test de normalidad de los residuos.
+    2. Breusch-Pagan: Test de homocedasticidad (varianza constante).
+    3. Durbin-Watson: Test de autocorrelación (independencia).
+
+    Args:
+        model (statsmodels.regression.linear_model.RegressionResultsWrapper): 
+            Modelo ajustado sobre el cual extraer los residuos.
+
+    Returns:
+        dict: Diccionario con los p-valores y estadísticos de diagnóstico.
+    """
     residuals = model.resid
     
-    # 1. Shapiro-Wilk (Normalidad)
+    # Shapiro-Wilk: Buscamos p > 0.05 para asumir normalidad
     sw_stat, sw_p = stats.shapiro(residuals)
     
-    # 2. Breusch-Pagan (Homocedasticidad)
+    # Breusch-Pagan: Buscamos p > 0.05 para asumir varianza constante
     # Requiere las variables exógenas del modelo
     bp_test = het_breuschpagan(residuals, model.model.exog)
     
-    # 3. Durbin-Watson (Autocorrelación)
+    # Durbin-Watson: Buscamos un valor cercano a 2.0 para descartar autocorrelación
     dw_stat = durbin_watson(residuals)
     
     diagnostics = {
