@@ -10,6 +10,8 @@ Para un gestor de activos, la narrativa del Bitcoin ha transitado entre ser un '
 
 **El objetivo:** Superar las limitaciones de la estadística convencional para encontrar la verdadera relación de equilibrio de largo plazo, eliminando sesgos como la regresión espuria y la autocorrelación.
 
+> 📙 **Nota para el lector:** Dada la naturaleza técnica de este análisis, se recomienda consultar previamente el [Glosario de terminología empleada](./GLOSARIO.md) para una interpretación precisa de los conceptos econométricos (Cointegración, ECM, Heterocedasticidad) y de mercado (Risk-on, High-beta) utilizados.
+
 ---
 
 ## 🚀 2. Key Insights: Hallazgos Cuantificables
@@ -53,15 +55,17 @@ Para garantizar la precisión de los cálculos y la robustez del análisis, se h
 ├── data/               # Datasets procesados (CSV).
 ├── notebooks/          # Flujo narrativo de la investigación (.ipynb).
 ├── src/                # Motor lógico modularizado (.py).
-│   ├── data_extraction_preprocessing.py 
+│   ├── data_extraction_preprocessing.py
 │   ├── data_visualization.py           
 │   ├── descriptive_analysis.py          
 │   ├── models_arima.py                  
 │   ├── models_econometrics.py           
 │   └── statistical_test.py              
 ├── .env.example        # Plantilla para variables de entorno (API Keys).
+├── glosario.md         # Diccionario de terminología técnica y financiera.
 ├── requirements.txt    # Entorno reproducible.
 └── README.md           # Resumen ejecutivo.
+
 ```
 
 ---
