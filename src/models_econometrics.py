@@ -59,14 +59,14 @@ def prepare_ecm_data(df, target, exogs, residuals):
         pd.DataFrame: DataFrame transformado con las variables diferenciadas 
             ('d_') y el residuo rezagado ('u_lag').
     """
-    # Diferencias (dY, dX)
+    # Dinámica de corto plazo: Primeras diferencias (dY, dX)
     df_diff = df[[target] + exogs].diff().dropna()
     df_diff.columns = [f'd_{col}' for col in df_diff.columns]
     
-    # Error retardado (u_{t-1})
+    # Mecanismo de corrección: Error retardado (u_{t-1})
     u_lag = residuals.shift(1).dropna()
     u_lag.name = 'u_lag'
     
-    # Unir y limpiar
+    # Sincronización temporal y limpieza de nulos generados por el lag
     ecm_df = pd.concat([df_diff, u_lag], axis=1).dropna()
     return ecm_df
