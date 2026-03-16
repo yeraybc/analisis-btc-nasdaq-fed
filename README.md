@@ -10,7 +10,7 @@ Para un gestor de activos, la narrativa del Bitcoin ha transitado entre ser un '
 
 **El objetivo:** Superar las limitaciones de la estadística convencional para encontrar la verdadera relación de equilibrio de largo plazo, eliminando sesgos como la regresión espuria y la autocorrelación.
 
-> 📙 **Nota para el lector:** Dada la naturaleza técnica de este análisis, se recomienda consultar previamente el [Glosario de terminología empleada](./GLOSARIO.md) para una interpretación precisa de los conceptos econométricos (Cointegración, ECM, Heterocedasticidad) y de mercado (Risk-on, High-beta) utilizados.
+> 📙 **Nota:** Dada la naturaleza técnica de este análisis, se recomienda consultar previamente el [Glosario de terminología empleada](./glosario.md) para una interpretación precisa de los conceptos econométricos (Cointegración, ECM, Heterocedasticidad) y de mercado (Risk-on, High-beta) utilizados.
 
 ---
 
