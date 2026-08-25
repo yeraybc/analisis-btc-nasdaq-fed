@@ -39,6 +39,7 @@ analisis-btc-nasdaq-fed/
 │   ├── 04_arima_arimax_modeling.ipynb      # ARIMA y ARIMAX con exógenas
 │   └── 05_cointegration_and_causality.ipynb # Engle-Granger, ECM e IV-2SLS
 ├── src/                                    # Funciones que usan los notebooks
+│   ├── build_dataset.py                    # Regenera el dataset sin abrir Jupyter
 │   ├── data_extraction_processing.py       # Descarga de Yahoo Finance y FRED
 │   ├── data_visualization.py               # Gráficos y diagnósticos visuales
 │   ├── descriptive_analysis.py             # Estadísticos descriptivos
@@ -152,11 +153,12 @@ No es una contradicción, es exactamente lo que predice la teoría. En niveles, 
    jupyter lab notebooks/
    ```
 
-4. **Regenera el dataset** (opcional). Solo hace falta si quieres extender la ventana temporal o actualizar los datos. El notebook 01 es el único que llama a las APIs, y para FRED necesita una clave:
+4. **Regenera el dataset** (opcional). Solo hace falta si quieres extender la ventana temporal o actualizar los datos. Necesita una clave de FRED, que se solicita gratis en la [web de la Reserva Federal de San Luis](https://fred.stlouisfed.org/docs/api/api_key.html); Yahoo Finance no pide credenciales.
    ```bash
-   cp .env.example .env    # y añade tu FRED_API_KEY
+   cp .env.example .env    # y añade tu FRED_API_KEY dentro
+   python -m src.build_dataset
    ```
-   La clave se solicita gratis en [FRED](https://fred.stlouisfed.org/docs/api/api_key.html), registrándose en la web de la Reserva Federal de San Luis. Yahoo Finance no requiere credenciales.
+   [src/build_dataset.py](src/build_dataset.py) hace lo mismo que el notebook 01 pero sin abrir Jupyter: descarga ambas fuentes, deja la descarga bruta en `data/raw/` y escribe el dataset mensual en `data/processed/`. Acepta `--start` y `--end` para cambiar la ventana. Ejecutarlo sobre los datos actuales reproduce el CSV versionado byte a byte, así que `git status` queda limpio si no hay datos nuevos.
 
 ## Autor
 
