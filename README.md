@@ -24,11 +24,9 @@ Análisis econométrico de series temporales sobre la relación entre Bitcoin, e
 
 La narrativa sobre el Bitcoin lleva años oscilando entre dos etiquetas incompatibles: refugio de valor descorrelacionado del mercado, u activo de riesgo que amplifica los movimientos de la renta variable. La pregunta tiene consecuencias prácticas: si es lo primero, añadirlo a una cartera reduce el riesgo; si es lo segundo, lo concentra justo cuando peor viene.
 
-El problema es que la vía rápida para responderla —correlacionar las series de precios y hacer una regresión— da una respuesta contundente y equivocada. Bitcoin y NASDAQ correlacionan a 0.94 en niveles, y un OLS explica el 88 % de la varianza. Ese resultado es un espejismo: las dos series comparten una tendencia, y eso basta para producir un ajuste altísimo entre variables que podrían no tener ninguna relación.
+El problema es que la vía rápida para responderla (correlacionar las series de precios y hacer una regresión) da una respuesta equivocada. Bitcoin y NASDAQ correlacionan a 0.94 en niveles, y un OLS explica el 88 % de la varianza. Ese resultado es engañoso, ya que las dos series comparten una tendencia, y eso basta para producir un ajuste entre variables que podrían no tener ninguna relación.
 
-> **Hallazgo principal:** los indicios de regresión espuria son inequívocos (Durbin-Watson de 0.36 sobre un R² de 0.879), pero al aplicar el contraste correcto la relación **resiste**. Las series cointegran: existe un equilibrio real de largo plazo, y las desviaciones se corrigen a un ritmo del 18,4 % mensual. Bitcoin no es un activo descorrelacionado; está anclado al NASDAQ por una relación estructural, no por una coincidencia de tendencias.
-
-El proyecto es, en el fondo, un ejercicio de disciplina metodológica: qué diferencia hay entre un número que parece un hallazgo y un número que sobrevive a que lo contrasten. Los conceptos técnicos que aparecen a continuación están explicados en el [glosario](glosario.md).
+> **Hallazgo principal:** los indicios de regresión espuria son inequívocos (Durbin-Watson de 0.36 sobre un R² de 0.879), pero al aplicar el contraste correcto la relación **resiste**. Las series cointegran: existe un equilibrio real de largo plazo, y las desviaciones se corrigen a un ritmo del 18,4 % mensual. Bitcoin NO es un activo descorrelacionado; está anclado al NASDAQ por una relación estructural, NO por una coincidencia de tendencias.
 
 ## Estructura del proyecto
 
@@ -55,7 +53,6 @@ analisis-btc-nasdaq-fed/
 │   ├── workflows/ci.yml                    # Verificación en cada push y PR
 │   └── scripts/check.py                    # Sintaxis y dependencias, sin instalar el stack
 ├── .env.example                            # Plantilla de credenciales
-├── glosario.md                             # Terminología econométrica y de mercado
 ├── requirements.txt
 ├── LICENSE
 └── README.md
@@ -100,25 +97,25 @@ Todas las cifras proceden de los outputs de los notebooks de este repositorio.
 | Efecto del tipo FED en niveles | −291,80 $ (p = 0.558) | No significativo |
 | Efecto del tipo FED en diferencias (ECM) | **−5.270,78 $** (p = 0.031) | Sí significativo |
 
-### El R² alto no es el hallazgo, es el síntoma
+### El R² alto no es el hallazgo
 
-Un R² de 0.879 acompañado de un Durbin-Watson de 0.36 es el retrato clásico de una regresión espuria. Durbin-Watson se mueve entre 0 y 4, y el valor neutro es 2; un 0.36 implica una autocorrelación residual de en torno a 0.82. Dicho de otro modo: los errores del modelo no son ruido, arrastran memoria de un mes a otro. Los tests lo confirman por otras dos vías, con Breusch-Pagan rechazando la homocedasticidad (p < 0.001) y Shapiro-Wilk la normalidad (p = 0.0035).
+Un R² de 0.879 acompañado de un Durbin-Watson de 0.36 es algo clásico de una regresión espuria. Durbin-Watson se mueve entre 0 y 4, y el valor neutro es 2; un 0.36 implica una autocorrelación residual de en torno a 0.82. Dicho de otro modo: los errores del modelo no son ruido, arrastran memoria de un mes a otro. Los tests lo confirman por otras dos vías, con Breusch-Pagan rechazando la homocedasticidad (p < 0.001) y Shapiro-Wilk la normalidad (p = 0.0035).
 
-La consecuencia práctica es que los errores estándar de esa regresión no valen, y por tanto tampoco valen sus contrastes de significatividad. Cualquier conclusión de inversión extraída de ahí estaría construida sobre una inferencia rota.
+La consecuencia práctica es que los errores estándar de esa regresión no valen, y por tanto tampoco valen sus contrastes de significatividad. Cualquier conclusión de inversión extraída de ahí estaría construida sobre una inferencia errónea.
 
-El contraste de las correlaciones lo enseña de forma más directa: 0.94 en niveles frente a 0.34 en retornos mensuales. La primera mide sobre todo que ambas series suben con el tiempo. La segunda mide lo que de verdad interesa a una cartera, que es si se mueven juntas mes a mes.
+El contraste de las correlaciones lo enseña de forma más directa: 0.94 en niveles frente a 0.34 en retornos mensuales. La primera mide sobre todo que ambas series suben con el tiempo. La segunda mide lo que de verdad importa a una cartera, que es si se mueven juntas mes a mes.
 
 ### Qué aporta la cointegración
 
-Aquí es donde el análisis deja de ser un ejercicio de desmontar y pasa a construir. Que dos series no estacionarias correlacionen no significa nada, pero si una combinación lineal de ellas **sí** es estacionaria, entonces comparten una tendencia estocástica común y la relación es real.
+Que dos series no estacionarias correlacionen no significa nada, pero si una combinación lineal de ellas **sí** es estacionaria, entonces comparten una tendencia estocástica común y la relación es real.
 
-El ADF sobre los residuos del equilibrio de largo plazo da −3.9102, por debajo del valor crítico al 5 % (−1.9435) y también al 1 % (−2.5846). Los residuos son estacionarios y las series cointegran, así que la relación entre BTC y NASDAQ sobrevive al contraste que tumbaba al OLS ingenuo.
+El ADF sobre los residuos del equilibrio de largo plazo da −3.9102, por debajo del valor crítico al 5 % (−1.9435) y también al 1 % (−2.5846). Los residuos son estacionarios y las series cointegran, así que la relación entre BTC y NASDAQ sobrevive al contraste que tumbaba al OLS.
 
-El modelo de corrección de error cuantifica la dinámica: el coeficiente del término de corrección es −0.1840 y es significativo (p = 0.001). Cada mes se corrige el 18,4 % de la desviación respecto al equilibrio, lo que sitúa el retardo medio de ajuste en torno a los **5,4 meses**. El signo negativo es lo que confirma que el mecanismo es estabilizador: cuando el Bitcoin se despega de su relación de largo plazo con el NASDAQ, tiende a volver.
+El modelo de corrección de error cuantifica la dinámica: el coeficiente del término de corrección es −0.1840 y es significativo (p = 0.001). Cada mes se corrige el 18,4 % de la desviación respecto al equilibrio, lo que sitúa el tiempo medio de ajuste en torno a los **5,4 meses**. El signo negativo es lo que confirma que el mecanismo es estabilizador: cuando el Bitcoin se despega de su relación de largo plazo con el NASDAQ, tiende a volver.
 
 ### El tipo de interés solo aparece al diferenciar
 
-El detalle más instructivo del análisis es que el tipo FED **no es significativo en la regresión en niveles** (p = 0.558) y **sí lo es dentro del ECM, en diferencias** (−5.270,78 $ por punto porcentual, p = 0.031).
+El detalle más interesante es que el tipo FED **no es significativo en la regresión en niveles** (p = 0.558) y **sí lo es dentro del ECM, en diferencias** (−5.270,78 $ por punto porcentual, p = 0.031).
 
 No es una contradicción, es exactamente lo que predice la teoría. En niveles, el efecto del tipo queda absorbido por la tendencia común que domina a las tres series. Al diferenciar, esa tendencia se elimina y emerge lo que quedaba tapado: lo que mueve al Bitcoin no es el nivel del tipo de interés, sino su **variación**. Es decir, los cambios en las condiciones de liquidez, no la liquidez en sí.
 
