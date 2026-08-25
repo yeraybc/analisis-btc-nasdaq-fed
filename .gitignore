@@ -24,8 +24,11 @@ venv/
 env/
 
 # --- DATOS ---
-# Ignora la carpeta data para que no suba archivos pesados
-data/*.csv
+# La descarga bruta de las APIs es regenerable, no se versiona.
+# El dataset final de data/processed/ sí, para que los notebooks 02-05
+# corran en un clon recién hecho sin necesidad de una API key de FRED.
+data/raw/*
+!data/raw/.gitkeep
 
 # --- DISTRIBUCIÓN ---
 # Archivos HTML
