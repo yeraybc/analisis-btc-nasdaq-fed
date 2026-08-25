@@ -26,7 +26,7 @@ La narrativa sobre el Bitcoin lleva años oscilando entre dos etiquetas incompat
 
 El problema es que la vía rápida para responderla (correlacionar las series de precios y hacer una regresión) da una respuesta equivocada. Bitcoin y NASDAQ correlacionan a 0.94 en niveles, y un OLS explica el 88 % de la varianza. Ese resultado es engañoso, ya que las dos series comparten una tendencia, y eso basta para producir un ajuste entre variables que podrían no tener ninguna relación.
 
-> **Hallazgo principal:** los indicios de regresión espuria son inequívocos (Durbin-Watson de 0.36 sobre un R² de 0.879), pero al aplicar el contraste correcto la relación **resiste**. Las series cointegran: existe un equilibrio real de largo plazo, y las desviaciones se corrigen a un ritmo del 18,4 % mensual. Bitcoin NO es un activo descorrelacionado; está anclado al NASDAQ por una relación estructural, NO por una coincidencia de tendencias.
+> **Hallazgo principal:** los indicios de regresión espuria son inequívocos (Durbin-Watson de 0.36 sobre un R² de 0.880), pero al aplicar el contraste correcto la relación **resiste**. Las series cointegran: existe un equilibrio real de largo plazo, y las desviaciones se corrigen a un ritmo del 18,4 % mensual. Bitcoin NO es un activo descorrelacionado; está anclado al NASDAQ por una relación estructural, NO por una coincidencia de tendencias.
 
 ## Estructura del proyecto
 
@@ -91,8 +91,8 @@ Todas las cifras proceden de los outputs de los notebooks de este repositorio.
 |---|---|---|
 | Correlación BTC-NASDAQ en niveles | **0.9375** | Sincronía aparente casi perfecta |
 | La misma, sobre retornos mensuales | **0.34** | La sincronía real es mucho menor |
-| R² del OLS en niveles | **0.879** | Ajuste altísimo, y sospechoso |
-| Durbin-Watson de ese OLS | **0.3603** | Autocorrelación residual severa (ρ ≈ 0.82) |
+| R² del OLS en niveles `btc ~ nasdaq + fed_rate + btc_vol` | **0.880** | Ajuste altísimo, y sospechoso |
+| Durbin-Watson de ese mismo OLS | **0.3603** | Autocorrelación residual severa (ρ ≈ 0.82) |
 | ADF sobre los residuos del equilibrio | **−3.9102** (crítico 5 %: −1.9435) | Los residuos son estacionarios: **cointegran** |
 | Velocidad de ajuste del ECM | **−0.1840** (p = 0.001) | Se corrige el 18,4 % de la desviación cada mes |
 | Efecto del tipo FED en niveles | −291,80 $ (p = 0.558) | No significativo |
@@ -100,7 +100,7 @@ Todas las cifras proceden de los outputs de los notebooks de este repositorio.
 
 ### El R² alto no es el hallazgo
 
-Un R² de 0.879 acompañado de un Durbin-Watson de 0.36 es algo clásico de una regresión espuria. Durbin-Watson se mueve entre 0 y 4, y el valor neutro es 2; un 0.36 implica una autocorrelación residual de en torno a 0.82. Dicho de otro modo: los errores del modelo no son ruido, arrastran memoria de un mes a otro. Los tests lo confirman por otras dos vías, con Breusch-Pagan rechazando la homocedasticidad (p < 0.001) y Shapiro-Wilk la normalidad (p = 0.0035).
+Un R² de 0.880 acompañado de un Durbin-Watson de 0.36 es algo clásico de una regresión espuria. Durbin-Watson se mueve entre 0 y 4, y el valor neutro es 2; un 0.36 implica una autocorrelación residual de en torno a 0.82. Dicho de otro modo: los errores del modelo no son ruido, arrastran memoria de un mes a otro. Los tests lo confirman por otras dos vías, con Breusch-Pagan rechazando la homocedasticidad (p < 0.001) y Shapiro-Wilk la normalidad (p = 0.0035).
 
 La consecuencia práctica es que los errores estándar de esa regresión no valen, y por tanto tampoco valen sus contrastes de significatividad. Cualquier conclusión de inversión extraída de ahí estaría construida sobre una inferencia errónea.
 
